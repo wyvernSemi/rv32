@@ -115,7 +115,6 @@ int ext_mem_access(const uint32_t addr, uint32_t& data, const int type, const rv
 #ifdef USE_INTERNAL_MEMORY
 
 # ifndef INT_MEM_TOP
-jdklflask;
 # define INT_MEM_TOP 0x00100000
 # endif
 
