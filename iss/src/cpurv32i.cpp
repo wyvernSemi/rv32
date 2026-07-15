@@ -68,7 +68,7 @@ extern "C" {
 // DEFINES
 // ------------------------------------------------
 
-#define RV32I_GETOPT_ARG_STR               "hHgdbeEraCTt:n:D:A:p:S:xcm:M:u:BL:"
+#define RV32I_GETOPT_ARG_STR               "hHgdbeEraCTt:n:D:A:p:S:s:xcm:M:u:BL:"
 
 #define INT_ADDR                           0xaffffffc
 #define UART0_BASE_ADDR                    0x80000000
