@@ -252,7 +252,7 @@ public:
     static const uint32_t RV32I_NUM_TERTIARY_OPCODES                   = 128;
     static const uint32_t RV32I_NUM_QUARTERNARY_OPCODES                = 32;
     static const uint32_t RV32I_NUM_SYSTEM_OPCODES                     = 32;
-    static const uint32_t RV32I_INT_MEM_BYTES                          = (1024*1024);
+    static const uint32_t RV32I_INT_MEM_BYTES                          = (2*1024*1024);
 
     // The RV32I base class has a hardwired MTVEC location since
     // since CSR accesses are not supported. Set to riscv-test-env
@@ -261,6 +261,9 @@ public:
 
     // Reset vector (implementation dependent)
     static const uint32_t RV32I_RESET_VECTOR                           = 0x00000000;
+
+    // Stack pointer (implementation dependent)
+    static const uint32_t RV32I_STACK_POINTER                          = 0x00000000;
 
     // Memory mapped mtime and mtimecmp register offsets
     static const uint32_t RV32I_RTCLOCK_ADDRESS                        = 0xafffffe0;
@@ -632,6 +635,8 @@ struct  rv32i_cfg_s {
     uint32_t       brk_addr;
     bool           update_rst_vec;
     uint32_t       new_rst_vec;
+    bool           update_sp;
+    bool           new_sp;
     FILE*          dbg_fp;
 
     rv32i_cfg_s()
@@ -659,6 +664,8 @@ struct  rv32i_cfg_s {
         brk_addr               = rv32i_consts::RISCV_TEST_ENV_TERMINATE_ADDR;
         update_rst_vec         = false;
         new_rst_vec            = rv32i_consts::RV32I_RESET_VECTOR;
+        update_sp              = false;
+        new_sp                 = rv32i_consts::RV32I_STACK_POINTER;
         dbg_fp                 = stdout;
     }
 };

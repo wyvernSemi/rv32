@@ -285,6 +285,12 @@ int rv32i_cpu::run(rv32i_cfg_s &cfg)
         cfg.update_rst_vec       = false;
     }
 
+    // If a new stack pointer specified, update the sp register
+    if (cfg.update_sp)
+    {
+        state.hart[curr_hart].x[2] = cfg.new_sp;
+    }
+
     rv32i_decode_t        decode;
     rv32i_decode_table_t* p_entry;
 

@@ -253,6 +253,10 @@ int parse_args(int argc, char** argv, rv32i_cfg_s &cfg)
             cfg.update_rst_vec = true;
             cfg.new_rst_vec    = (uint32_t)strtoll(optarg, NULL, 0);
             break;
+        case 's':
+            cfg.update_sp = true;
+            cfg.new_sp    = (uint32_t)strtoll(optarg, NULL, 0);
+            break;
         case 'u':
             uart0_base_addr    = (uint32_t)strtoll(optarg, NULL, 0);
             break;
@@ -266,7 +270,7 @@ int parse_args(int argc, char** argv, rv32i_cfg_s &cfg)
         default:
             fprintf(stderr, "\nrv32 version %d.%d.%d. Copyright (c) 2021-2025 Simon Southwell.\n\n", rv32::major_ver, rv32::minor_ver, rv32::patch_ver);
             fprintf(stderr, "Usage: %s [-hHeEbdragxcCTB][-t <test executable>][-n <num instructions>]\n", argv[0]);
-            fprintf(stderr, "      [-S <start addr>][-A <brk addr>][-D <debug o/p filename>][-p <port num>]\n");
+            fprintf(stderr, "      [-S <start addr>][-s <sp addr>][-A <brk addr>][-D <debug o/p filename>][-p <port num>]\n");
             fprintf(stderr, "      [-m <num words>][-M <addr>][-u <uart addr>][-L<binary load addr>]\n\n");
             fprintf(stderr, "   -t specify test executable (default test.exe)\n");
             fprintf(stderr, "   -B specify to load a raw binary file (default load ELF executable)\n");
@@ -290,6 +294,7 @@ int parse_args(int argc, char** argv, rv32i_cfg_s &cfg)
             fprintf(stderr, "   -g Enable remote gdb mode (default disabled)\n");
             fprintf(stderr, "   -p Specify remote GDB port number (default 49152)\n");
             fprintf(stderr, "   -S Specify start address (default 0)\n");
+            fprintf(stderr, "   -s Specify stack pointer address (default 0)\n");
             fprintf(stderr, "   -u Specify UART base address (default 0x80000000)\n");
             fprintf(stderr, "   -h display this help message\n");
             error = 1;
@@ -316,6 +321,11 @@ static int handler(void* user, const char* section, const char* name, const char
     {
         pconfig->new_rst_vec = (uint32_t)strtoll(value, NULL, 0);
         pconfig->update_rst_vec = true;
+    }
+    else if (MATCH("program", "stack_pointer"))
+    {
+        pconfig->new_sp = (uint32_t)strtoll(value, NULL, 0);
+        pconfig->update_sp = true;
     }
     else if (MATCH("program", "load_binary_addr"))
     {
@@ -451,6 +461,9 @@ int ext_mem_access(const uint32_t byte_addr, uint32_t& data, const int type, con
     {
         uint32_t addr = byte_addr;
         processed = 0;
+
+        if (byte_addr == 0xfffffff8)
+            printf("help\n");
 
         switch (type & MEM_NOT_DBG_MASK)
         {
