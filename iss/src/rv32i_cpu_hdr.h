@@ -636,7 +636,7 @@ struct  rv32i_cfg_s {
     bool           update_rst_vec;
     uint32_t       new_rst_vec;
     bool           update_sp;
-    bool           new_sp;
+    uint32_t       new_sp;
     FILE*          dbg_fp;
 
     rv32i_cfg_s()
